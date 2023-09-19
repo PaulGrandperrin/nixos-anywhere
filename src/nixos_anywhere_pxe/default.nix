@@ -3,6 +3,7 @@
 , python3
 , ruff
 , runCommand
+, nixos-anywhere
 }:
 let
   src = ../..;
@@ -17,6 +18,7 @@ let
       pytest-subprocess
       setuptools
       wheel
+      netaddr
       ;
   };
 
@@ -27,8 +29,15 @@ let
     nativeBuildInputs = [
       python3.pkgs.setuptools
     ];
+    propagatedBuildInputs = [
+      python3.pkgs.netaddr
+      nixos-anywhere
+    ];
     passthru.tests = { inherit nixos-anywhere-pxe-mypy; };
     passthru.devDependencies = devDependencies;
+    pythonImportsCheck = [
+      "netaddr"
+    ];
   };
 
   checkPython = python3.withPackages (_ps: devDependencies);
